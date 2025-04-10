@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AI Art T-Shirt Checkout</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/media-queries.css" />
+  <script src="https://js.paystack.co/v1/inline.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>AI Art T-Shirt - ₦10,000</h1>
+    <form id="checkout-form" onsubmit="payWithPaystack(); return false;">
+      <label for="name">Full Name</label>
+      <input type="text" id="name" placeholder="John Doe" required />
+
+      <label for="email">Email Address</label>
+      <input type="email" id="email" placeholder="johndoe@example.com" required />
+
+      <label for="phone">Phone Number</label>
+      <input type="tel" id="phone" placeholder="08012345678" required />
+
+      <button type="submit">Pay Now</button>
+    </form>
+
+    <div class="footer">Powered by Paystack</div>
+  </div>
+
+  <script>
+    function payWithPaystack() {
+      let name = document.getElementById('name').value;
+      let email = document.getElementById('email').value;
+      let phone = document.getElementById('phone').value;
+
+      let handler = PaystackPop.setup({
+        key: 'pk_test_12555351d8f469120ca3e6d90eba1202cc4a7293',
+        email: email,
+        amount: 1000000, 
+        currency: 'NGN',
+        ref: 'AIART-' + Math.floor(Math.random() * 1000000000),
+        metadata: {
+          custom_fields: [
+            { display_name: "Full Name", variable_name: "full_name", value: name },
+            { display_name: "Phone Number", variable_name: "phone", value: phone }
+          ]
+        },
+        callback: function (response) {
+          alert('✅ Payment successful! Reference: ' + response.reference);
+          window.location.href = "https://example.com/thank-you"; 
+        },
+        onClose: function () {
+          alert('❌ Payment cancelled.');
+        }
+      });
+
+      handler.openIframe();
+    }
+  </script>
+</body>
+</html>
